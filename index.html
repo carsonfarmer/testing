@@ -1,0 +1,311 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>@nullify/testing</title>
+	<meta name="description" content="Documentation for @nullify/testing">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">@nullify/testing</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>@nullify/testing</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#nullifytesting" id="nullifytesting" style="color: inherit; text-decoration: none;">
+					<h1><code>@nullify/testing</code></h1>
+				</a>
+				<a href="#why" id="why" style="color: inherit; text-decoration: none;">
+					<h2>Why?</h2>
+				</a>
+				<p>Because writing tests should be just like writing any other code. When writing tests with <code>@nullify/testing</code>, test modules are simple standalone scripts. They can be run in NodeJS, browsers, on mobile devices, etc. There are no external test runners or special global variables to require. Simply import <code>@nullify/testing</code>, define your tests using APIs that are similar to other testing frameworks, and run the script &quot;as is&quot;.</p>
+				<p>It will automatically run as a test suite!</p>
+				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
+					<h2>Features</h2>
+				</a>
+				<ul>
+					<li>No cli, external test runners, or global variables</li>
+					<li>Minimal and fast API with zero dependencies</li>
+					<li>Async/await and promise support</li>
+					<li>Run suites serially or concurrently</li>
+					<li>Supports timeouts at the suite and individual test level</li>
+					<li>Browser support (thanks to ES modules)</li>
+					<li>Use any assertion library you want (but comes with its own)</li>
+					<li>Built with Typescript, and supports Typescript tests</li>
+					<li>Coverage reporting tools &quot;just work&quot;</li>
+				</ul>
+				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+					<h2>Usage</h2>
+				</a>
+				<p>There are multiple alternative APIs to make using <code>@nullify/testing</code> as easy as possible. Each test &quot;suite&quot; is a self-contained test suite, with its own runner and &quot;stack&quot; of hooks. Hooks are scoped to a given suite, and possibly to a given group within a suite. Ideally, each suite is its own module, and can be auto-run on import. For more complex testing scenarios, it is possible to include multiple suites in a single module, or to use an &quot;index&quot; test script to import multiple test suites.</p>
+				<p>Tests <em>within</em> a suite are run serially. But, individual suites can be run concurrently. Concurrency is simply a function of how the test suite is run. If you export a &quot;promised&quot; suite from a module and await it before running the next, you have serial tests, otherwise, you&#39;ll have concurrent tests!</p>
+				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+					<h3>Examples</h3>
+				</a>
+				<p><strong>Suite as object</strong></p>
+				<p>Import and create a new suite object. Tests can be awaited to support running multiple suites in series (or concurrently). Specify optional settings to control suite behavior, such as disabling <code>console.log</code> output, or auto-running the whole suite.</p>
+				<pre><code class="language-typescript"><span style="color: #008000">// one.test.js</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Suite</span><span style="color: #000000">, </span><span style="color: #001080">assert</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">test</span><span style="color: #000000">, </span><span style="color: #0070C1">end</span><span style="color: #000000"> } = </span><span style="color: #001080">Suite</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;object&quot;</span><span style="color: #000000">);</span>
+
+<span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">assert</span><span style="color: #000000">(</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;should pass&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// Export awaited promise to enable chain-able test suites!</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">end</span><span style="color: #000000">;</span>
+</code></pre>
+				<p>A series of test suites like the above can be chained with:</p>
+				<pre><code class="language-typescript"><span style="color: #008000">// index.test.js</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one.test.js&quot;</span><span style="color: #000000">);</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;two.test.js&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">...</span>
+<span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one.test.js&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;two.test.js&quot;</span><span style="color: #000000">));</span>
+
+<span style="color: #AF00DB">export</span><span style="color: #000000"> {}</span>
+</code></pre>
+				<p>Alternatively, <code>@nullify/testing</code> comes with a tool to &quot;collect&quot; suites into a single run:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">collect</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// Run tests in series</span>
+<span style="color: #795E26">collect</span><span style="color: #000000">(</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./one.test.js&quot;</span><span style="color: #000000">),</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./two.test.js&quot;</span><span style="color: #000000">),</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./three.test.js&quot;</span><span style="color: #000000">)</span>
+<span style="color: #000000">);</span>
+</code></pre>
+				<p><strong>Suite as class</strong></p>
+				<p>Import and create a new test Suite. By default, a Suite will automatically run your tests on import. Suites also support chained methods for a concise test specification.</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Suite</span><span style="color: #000000">, </span><span style="color: #001080">assert</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// Tests will auto-run when this module is imported/run</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">suite</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Suite</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;class&quot;</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">suite</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">beforeEach</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Setup test here</span>
+<span style="color: #000000">  })</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #795E26">assert</span><span style="color: #000000">(</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;should pass&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">  })</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">afterEach</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Cleanup test here</span>
+<span style="color: #000000">  });</span>
+</code></pre>
+				<p><strong>Suite as function</strong></p>
+				<p>Suites can be kept isolated within the same module, or across multiple (importable) modules. To make specifying multiple suites per module nicer (or at last, nicer looking), there is also a &quot;functional&quot; API that lets you to scope test methods to a single suite setup function:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">suite</span><span style="color: #000000">, </span><span style="color: #001080">assert</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #795E26">suite</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;func&quot;</span><span style="color: #000000">, ({ </span><span style="color: #001080">test</span><span style="color: #000000">, </span><span style="color: #001080">group</span><span style="color: #000000">, </span><span style="color: #001080">hooks</span><span style="color: #000000"> }) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #795E26">assert</span><span style="color: #000000">(</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;should pass&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">group</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;group&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">hooks</span><span style="color: #000000">.</span><span style="color: #795E26">beforeAll</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #008000">// Group-specific test setup</span>
+<span style="color: #000000">    });</span>
+<span style="color: #000000">    </span><span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;two&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #008000">// This will fail!</span>
+<span style="color: #000000">      </span><span style="color: #001080">assert</span><span style="color: #000000">.</span><span style="color: #795E26">deepStrictEqual</span><span style="color: #000000">(</span>
+<span style="color: #000000">        { </span><span style="color: #001080">this:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;that&quot;</span><span style="color: #000000">, </span><span style="color: #001080">another:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000"> },</span>
+<span style="color: #000000">        { </span><span style="color: #001080">this:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;them&quot;</span><span style="color: #000000">, </span><span style="color: #001080">other:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000"> }</span>
+<span style="color: #000000">      );</span>
+<span style="color: #000000">    });</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+</code></pre>
+				<p><strong>Typescript support</strong></p>
+				<p>Since suites are just scripts, simply run your script with Typescript support:</p>
+				<pre><code class="language-bash"><span style="color: #000000">node --loader ts-node/esm file.test.ts</span>
+</code></pre>
+				<p><strong>Test coverage</strong></p>
+				<p>Most test coverage tools &quot;just work&quot;, without any additional effort:</p>
+				<pre><code class="language-bash"><span style="color: #000000">c8 node file.test.js</span>
+</code></pre>
+				<p><strong>Browser support</strong></p>
+				<p>Runs in any modern browser with ES module support. Simply import it and define your tests; no bundlers required!</p>
+				<pre><code class="language-html"><span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">type</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;module&quot;</span><span style="color: #800000">&gt;</span>
+<span style="color: #000000FF">  </span><span style="color: #AF00DB">import</span><span style="color: #000000FF"> { </span><span style="color: #001080">Suite</span><span style="color: #000000FF">, </span><span style="color: #001080">assert</span><span style="color: #000000FF"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000FF"> </span><span style="color: #A31515">&quot;https://unpkg.com/@nullify/testing?module&quot;</span><span style="color: #000000FF">;</span>
+
+<span style="color: #000000FF">  </span><span style="color: #0000FF">const</span><span style="color: #000000FF"> </span><span style="color: #0070C1">suite</span><span style="color: #000000FF"> </span><span style="color: #000000">=</span><span style="color: #000000FF"> </span><span style="color: #0000FF">new</span><span style="color: #000000FF"> </span><span style="color: #795E26">Suite</span><span style="color: #000000FF">(</span><span style="color: #A31515">&quot;example&quot;</span><span style="color: #000000FF">);</span>
+<span style="color: #000000FF">  </span><span style="color: #001080">suite</span><span style="color: #000000FF">.</span><span style="color: #795E26">test</span><span style="color: #000000FF">(</span><span style="color: #A31515">&quot;one&quot;</span><span style="color: #000000FF">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> {</span>
+<span style="color: #000000FF">    </span><span style="color: #795E26">assert</span><span style="color: #000000FF">(</span><span style="color: #0000FF">true</span><span style="color: #000000FF">, </span><span style="color: #A31515">&quot;should pass&quot;</span><span style="color: #000000FF">);</span>
+<span style="color: #000000FF">  });</span>
+<span style="color: #800000">&lt;/script&gt;</span>
+</code></pre>
+				<p><strong>Alternative APIs</strong></p>
+				<p>To make migrating existing test suites over to <code>@nullify/testing</code> easier, the library comes with (a limited set of) built-in aliases for BDD style interfaces. Just include the imports and destructuring at the top of
+				your test files, and you&#39;re pretty much good to go!</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Suite</span><span style="color: #000000">, </span><span style="color: #001080">assert</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">it</span><span style="color: #000000">, </span><span style="color: #0070C1">describe</span><span style="color: #000000">, </span><span style="color: #0070C1">before</span><span style="color: #000000"> } = </span><span style="color: #001080">Suite</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;bdd&quot;</span><span style="color: #000000">);</span>
+
+<span style="color: #795E26">describe</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;the main test&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">something</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&quot;&quot;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #795E26">before</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">something</span><span style="color: #000000"> = </span><span style="color: #A31515">&quot;from nothing!&quot;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">  </span><span style="color: #795E26">it</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;should be strictly equal&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">assert</span><span style="color: #000000">.</span><span style="color: #795E26">strictEquals</span><span style="color: #000000">(</span><span style="color: #001080">something</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;from nothing!&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+</code></pre>
+				<script type="module" unsafe-inline>
+  import { Suite, assert } from "https://unpkg.com/@nullify/testing?module";
+
+  const suite = new Suite("example");
+  suite.test("one", () => {
+    assert(true, "should pass");
+  });
+</script>
+				<a href="#detailsthanks" id="detailsthanks" style="color: inherit; text-decoration: none;">
+					<h2>Details/Thanks</h2>
+				</a>
+				<p>The <code>@nullify/testing</code> library borrows heavily from the Deno standard library <a href="https://github.com/denoland/deno_std/tree/main/testing"><code>testing</code> module</a>, the builtin <a href="https://doc.deno.land/builtin/stable#Deno.test"><code>Deno.test</code></a> tooling, as well as <a href="https://github.com/ben-page/node-test"><code>node-test</code></a>, and <a href="https://github.com/luvies/deno_hooked"><code>hooked</code></a>. It is kept simple by only supporting ES modules, promises and async/await patterns, and a very limited and opinionated API. What this leads to is simpler tests that &quot;just work&quot;.</p>
+				<p>Hooks are implemented using a last-in first-out (LIFO) stack (thanks <code>hooked</code>), and the built-in test runner is a simple ordered test registry that can be iterated over as an async iterable (thanks Deno). The built-in assertion library is borrowed directly from Deno with minimal changes (thanks again Deno). The main difference is in how objects are formatted for comparison. This library uses vanilla <code>JSON.stringify</code> behavior to keep things simple and compatible, but at the expense of twice as many calls to <code>JSON.stringify</code> (thanks Stackoverflow).</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-reference">
+						<a href="modules.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/assertionerror.html" class="tsd-kind-icon">Assertion<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/suite.html" class="tsd-kind-icon">Suite</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/createoptions.html" class="tsd-kind-icon">Create<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/exportedsuiteend.html" class="tsd-kind-icon">Exported<wbr>Suite<wbr>End</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/runoptions.html" class="tsd-kind-icon">Run<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/suiteend.html" class="tsd-kind-icon">Suite<wbr>End</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/suiteoptions.html" class="tsd-kind-icon">Suite<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/testdefinition.html" class="tsd-kind-icon">Test<wbr>Definition</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/testend.html" class="tsd-kind-icon">Test<wbr>End</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/testevent.html" class="tsd-kind-icon">Test<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#assertnamespace" class="tsd-kind-icon">Assert<wbr>Namespace</a>
+					</li>
+					<li class=" tsd-kind-type-alias">
+						<a href="modules.html#suitemodule" class="tsd-kind-icon">Suite<wbr>Module</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#assert" class="tsd-kind-icon">assert</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#collect" class="tsd-kind-icon">collect</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#delay" class="tsd-kind-icon">delay</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#exit" class="tsd-kind-icon">exit</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#suite" class="tsd-kind-icon">suite</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
