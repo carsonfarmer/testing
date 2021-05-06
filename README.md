@@ -140,7 +140,7 @@ Runs in any modern browser with ES module support. Simply import it and define y
 
 ```html
 <script type="module">
-  import { Suite, assert } from "https://unpkg.com/@nullify/testing?module";
+  import { Suite, assert } from "https://unpkg.com/@nullify/testing";
 
   const suite = new Suite("example");
   suite.test("one", () => {
@@ -171,7 +171,7 @@ describe("the main test", () => {
 ```
 
 <script type="module" unsafe-inline>
-  import { Suite, assert } from "https://unpkg.com/@nullify/testing";
+  import { Suite, assert } from "https://unpkg.com/@nullify/testing/dist/mod.js";
 
   const suite = new Suite("example");
   suite.test("one", () => {
