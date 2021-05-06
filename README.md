@@ -136,7 +136,7 @@ c8 node file.test.js
 
 **Browser support**
 
-Runs in any modern browser with ES module support. Simply import it and define your tests; no bundlers required!
+Runs in any modern browser with ES module support. Simply import it and define your tests; no bundlers required. In fact, if you're viewing this README via https://carsonfarmer.github.io/testing/ or somewhere that allows `<script/>`, you can see the test results for the following "suite" in your developer console!
 
 ```html
 <script type="module">
