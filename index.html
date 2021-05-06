@@ -106,19 +106,26 @@
 				<pre><code class="language-typescript"><span style="color: #008000">// index.test.js</span>
 <span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one.test.js&quot;</span><span style="color: #000000">);</span>
 <span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;two.test.js&quot;</span><span style="color: #000000">);</span>
-<span style="color: #000000">...</span>
+<span style="color: #008000">// or...</span>
 <span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;one.test.js&quot;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;two.test.js&quot;</span><span style="color: #000000">));</span>
 
-<span style="color: #AF00DB">export</span><span style="color: #000000"> {}</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> {};</span>
 </code></pre>
 				<p>Alternatively, <code>@nullify/testing</code> comes with a tool to &quot;collect&quot; suites into a single run:</p>
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">collect</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
 
-<span style="color: #008000">// Run tests in series</span>
+<span style="color: #008000">// Run suites in series</span>
 <span style="color: #795E26">collect</span><span style="color: #000000">(</span>
 <span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./one.test.js&quot;</span><span style="color: #000000">),</span>
 <span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./two.test.js&quot;</span><span style="color: #000000">),</span>
 <span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./three.test.js&quot;</span><span style="color: #000000">)</span>
+<span style="color: #000000">);</span>
+
+<span style="color: #008000">// Run suites concurrently</span>
+<span style="color: #795E26">collect</span><span style="color: #000000">(</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./one.test.js&quot;</span><span style="color: #000000">),</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./two.test.js&quot;</span><span style="color: #000000">),</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">import</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;./three.test.js&quot;</span><span style="color: #000000">)</span>
 <span style="color: #000000">);</span>
 </code></pre>
 				<p><strong>Suite as class</strong></p>
@@ -126,9 +133,7 @@
 				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">Suite</span><span style="color: #000000">, </span><span style="color: #001080">assert</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;@nullify/testing&quot;</span><span style="color: #000000">;</span>
 
 <span style="color: #008000">// Tests will auto-run when this module is imported/run</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">suite</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Suite</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;class&quot;</span><span style="color: #000000">);</span>
-
-<span style="color: #001080">suite</span>
+<span style="color: #001080">Suite</span><span style="color: #000000">.</span><span style="color: #795E26">create</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;class&quot;</span><span style="color: #000000">)</span>
 <span style="color: #000000">  .</span><span style="color: #795E26">beforeEach</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">    </span><span style="color: #008000">// Setup test here</span>
 <span style="color: #000000">  })</span>
