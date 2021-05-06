@@ -171,7 +171,7 @@ describe("the main test", () => {
 ```
 
 <script type="module" unsafe-inline>
-  import { Suite, assert } from "https://unpkg.com/@nullify/testing?module";
+  import { Suite, assert } from "https://unpkg.com/@nullify/testing";
 
   const suite = new Suite("example");
   suite.test("one", () => {
