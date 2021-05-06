@@ -78,17 +78,27 @@ function wrapHooks(
   return { ...testDef, fn: wrappedFn };
 }
 
-function top(s: _Suite): Context {
-  return s.stack[s.stack.length - 1];
-}
-
+/**
+ * Hooks can be used to set up preconditions and clean up after tests.
+ * Tests can appear before, after, or interspersed with hooks. Hooks will
+ * run in the order they are defined, as appropriate; all beforeAll() hooks
+ * run (once), then any beforeEach() hooks, tests, any afterEach() hooks, and
+ * finally afterAll() hooks (once).
+ */
 export interface Hooks {
+  // Runs once before the first test in this block
   beforeAll: (fn: () => void | Promise<void>) => _Suite;
+  // Runs before each test in this block
   beforeEach: (fn: () => void | Promise<void>) => _Suite;
+  // Runs once after the last test in this block
   afterAll: (fn: () => void | Promise<void>) => _Suite;
+  // Runs after each test in this block
   afterEach: (fn: () => void | Promise<void>) => _Suite;
 }
 
+/**
+ * @internal
+ */
 type Deferred<T> = {
   promise: Promise<T>;
   pending: boolean;
@@ -96,6 +106,9 @@ type Deferred<T> = {
   reject: (reason?: unknown) => void;
 };
 
+/**
+ * @internal
+ */
 function deferred<T = unknown>(): Deferred<T> {
   return (() => {
     let resolve: (value: T | PromiseLike<T>) => void = () => undefined;
@@ -116,21 +129,35 @@ function deferred<T = unknown>(): Deferred<T> {
   })();
 }
 
-/**
- * A Suite is a test environment in which all tests, groups, and hooks are
- * run together.
- */
 class _Suite {
-  public options: RunOptions = {};
-  public stack: StackItem[] = [];
-  public registry: TestDefinition[] = [];
-  public hooks: Hooks;
+  /**
+   * The options to control test suite runs.
+   */
+  options: RunOptions = {};
+  // The internal context stack. Contains hooks and groups.
+  #stack: StackItem[] = [];
+  // The internal test registry. Contains all tests (in order) for the suite.
+  #registry: TestDefinition[] = [];
+  /**
+   * The hooks namespace, for easier access via destructuring.
+   */
+  hooks: Hooks;
+  // The internal test result cache.
   #cache: Deferred<SuiteEnd> = deferred();
+  /**
+   * The public interface to the deferred result object that resolves
+   * once the test suite has been run.
+   */
   readonly end: Promise<SuiteEnd> = this.#cache.promise;
+  /**
+   * Create a new test suite.
+   * @param name Unique, human-readable name for the suite.
+   * @param opts The options to control test suite runs.
+   */
   constructor(readonly name: string, opts: RunOptions = {}) {
     this.options = { ...defaultRunOptions, ...opts };
     // Push new context onto the stack
-    this.stack = [{ ...newContext(), name }];
+    this.#stack = [{ ...newContext(), name }];
     // Manually bind the target methods we'll be using :(
     this.group = this.group.bind(this);
     this.test = this.test.bind(this);
@@ -150,24 +177,32 @@ class _Suite {
     this.it = this.it.bind(this);
     this.describe = this.describe.bind(this);
     this.before = this.before.bind(this);
+    this.after = this.after.bind(this);
+  }
+
+  // https://github.com/microsoft/TypeScript/issues/37677
+  private top(): Context {
+    return this.#stack[this.#stack.length - 1];
   }
 
   /**
    * Adds a function to be called before all tests are run.
    */
   beforeAll(fn: () => void | Promise<void>): this {
-    top(this).beforeAll.push(fn);
+    this.top().beforeAll.push(fn);
     return this;
   }
 
-  // Alias for beforeAll
+  /**
+   * Alias for beforeAll method
+   */
   before = this.beforeAll;
 
   /**
    * Adds a function to be called before each test runs.
    */
   beforeEach(fn: () => void | Promise<void>): this {
-    top(this).beforeEach.push(fn);
+    this.top().beforeEach.push(fn);
     return this;
   }
 
@@ -175,7 +210,7 @@ class _Suite {
    * Adds a function to be called after each test runs.
    */
   afterEach(fn: () => void | Promise<void>): this {
-    top(this).afterEach.push(fn);
+    this.top().afterEach.push(fn);
     return this;
   }
 
@@ -183,38 +218,57 @@ class _Suite {
    * Adds a function to be called after all tests have run.
    */
   afterAll(fn: () => void | Promise<void>): this {
-    top(this).afterAll.push(fn);
+    this.top().afterAll.push(fn);
     return this;
   }
 
+  /**
+   * Alias for afterAll method
+   */
+  after = this.afterAll;
+
+  /**
+   * Groups provides a way to keep tests easier to read and organized.
+   * A group is a test environment in which all tests, sub-groups, and hooks
+   * are run together within a shared context.
+   * @param name Unique, human-readable name for the group.
+   * @param fn The initialization function.
+   */
   group(name: string, fn: (suite: _Suite) => void): this {
-    this.stack.push({ ...newContext(), name });
+    this.#stack.push({ ...newContext(), name });
     fn(this);
-    this.stack.pop();
+    this.#stack.pop();
     return this;
   }
 
-  // Alias for group
+  /**
+   * Alias for group method
+   */
   describe = this.group;
 
+  /**
+   * Reset the test suite by clearing out internal cache, registry, and stack.
+   */
   reset(): this {
     // Reset the registry etc.
     this.#cache = deferred();
-    this.registry = [];
-    this.stack = [{ ...newContext(), name: this.name }];
+    this.#registry = [];
+    this.#stack = [{ ...newContext(), name: this.name }];
     return this;
   }
 
   /**
    * Register a test which will be run when the suite is run.
    * `fn` can be async if required.
-   * ```ts
-   * import assert from "assert";
+   * @example
+   * ```typescript
+   * import  { Suite, assert } from "@nullify/testing";
+   * const { test } = new Suite("test")
    *
    * test({
    *   name: "example test",
    *   fn(): void {
-   *     assert.strictEqual("world", "world");
+   *     assert.strictEquals("world", "world");
    *   },
    * });
    *
@@ -230,7 +284,7 @@ class _Suite {
    *   name: "example async test",
    *   async fn() {
    *     const data = await Promise.resolve("hello world");
-   *     assert.strictEqual(data, "Hello world");
+   *     assert.strictEquals(data, "Hello world");
    *   }
    * });
    * ```
@@ -239,17 +293,18 @@ class _Suite {
   /**
    * Register a test which will be run when the suite is run.
    * `fn` can be async if required.
-   *
-   * ```ts
-   * import assert from "assert";
+   * @example
+   * ```typescript
+   * import  { Suite, assert } from "@nullify/testing";
+   * const { test } = new Suite("test")
    *
    * test("My test description", (): void => {
-   *   assert.strictEqual("hello", "hello");
+   *   assert.strictEquals("hello", "hello");
    * });
    *
    * test("My async test description", async (): Promise<void> => {
    *     const data = await Promise.resolve("hello world");
-   *     assert.strictEqual(data, "Hello world");
+   *     assert.strictEquals(data, "Hello world");
    * });
    * ```
    * */
@@ -282,28 +337,36 @@ class _Suite {
 
     // Set up waiting count
     if (!testDef.ignore) {
-      this.stack.map((name) => name.waiting++);
+      this.#stack.map((name) => name.waiting++);
     }
 
     if (testDef.only) {
-      this.stack.map((name) => name.only++);
+      this.#stack.map((name) => name.only++);
     }
 
     // Generate name
-    const name = this.stack.map(({ name: n }) => n);
+    const name = this.#stack.map(({ name: n }) => n);
     name.push(testDef.name);
     testDef.name = name.join(" > ");
 
     // Copy stack at time of function registration
-    const copy = [...this.stack];
+    const copy = [...this.#stack];
 
-    this.registry.push(wrapHooks(testDef, copy));
+    this.#registry.push(wrapHooks(testDef, copy));
     return this;
   }
 
-  // Alias for test
+  /**
+   * Alias for test method
+   */
   it = this.test;
 
+  /**
+   * Manually run the test suite. This is generally not needed, as the test
+   * suite should run automatically in most cases (unless `autoRun` is set to
+   * false).
+   * @param opts The options to control test suite run.
+   */
   async run(opts: RunOptions = {}): Promise<SuiteEnd> {
     if (!this.#cache.pending) return this.end;
     const options = { ...this.options, ...opts };
@@ -315,7 +378,7 @@ class _Suite {
     }
 
     const runner = new TestRunner(
-      this.registry,
+      this.#registry,
       filterFn,
       options.failFast ?? false
     );
@@ -377,10 +440,17 @@ export interface SuiteOptions extends RunOptions {
   autoRun?: boolean;
 }
 
+/**
+ * CreateOptions represents options for creating a new test suite.
+ */
 export interface CreateOptions extends SuiteOptions {
   fn?: (suite: Suite) => void;
 }
 
+/**
+ * A test Suite is a test environment in which all tests, groups, and hooks are
+ * run together.
+ */
 export class Suite extends _Suite {
   constructor(name: string);
   constructor(opts: SuiteOptions);
@@ -398,7 +468,15 @@ export class Suite extends _Suite {
     if (options.autoRun) setTimeout(() => this.run(), 0);
   }
 
+  /**
+   * Create a new test suite.
+   * @param name Unique, human-readable name for the suite.
+   */
   static create(name: string): Suite;
+  /**
+   * Create a new test suite.
+   * @param opts The options to control test suite initialization and runs.
+   */
   static create(opts?: SuiteOptions): Suite;
   static create(opts: string | SuiteOptions = {}): Suite {
     if (typeof opts === "string") {
@@ -415,6 +493,10 @@ export class Suite extends _Suite {
   }
 }
 
+/**
+ * Collect a set of suite results, export suites, or promised suite results.
+ * @param mods Suite results, modules exporting suite results.
+ */
 export async function collect(
   ...mods: Array<Promise<ExportedSuiteEnd> | ExportedSuiteEnd | SuiteEnd>
 ): Promise<SuiteEnd> {
@@ -442,6 +524,9 @@ export async function collect(
   return end;
 }
 
+/**
+ * Create a new test suite from an initialization function.
+ */
 export function suite(s: string, fn: (suite: Suite) => void): Suite;
 export function suite(opts: CreateOptions): Suite;
 export function suite(
@@ -470,9 +555,6 @@ export function suite(
   if (suiteDef.fn) suiteDef.fn(suite);
   return suite;
 }
-
-// Alias for suite
-export const describe = suite;
 
 function createFilterFn(filter?: RegExp | string, skip?: RegExp | string) {
   return (def: TestDefinition) => {

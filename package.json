@@ -32,7 +32,8 @@
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "verify": "npm run build && npm run test && npm run lint",
     "changeset": "changeset",
-    "release": "npm run verify && changeset publish"
+    "release": "npm run verify && changeset publish",
+    "docs": "typedoc --excludePrivate --excludeInternal src/mod.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.14.1",
@@ -45,6 +46,7 @@
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
+    "typedoc": "^0.20.36",
     "typescript": "^4.2.3"
   }
 }
