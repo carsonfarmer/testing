@@ -123,6 +123,8 @@ suite("func", ({ test, group, hooks }) => {
 });
 ```
 
+Take a look at `src/api.test.ts` for a comprehensive set of API examples.
+
 **Typescript support**
 
 Since suites are just scripts, simply run your script with Typescript support:
