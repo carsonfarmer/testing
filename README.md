@@ -50,10 +50,10 @@ A series of test suites like the above can be chained with:
 // index.test.js
 await import("one.test.js");
 await import("two.test.js");
-...
+// or...
 import("one.test.js").then(() => import("two.test.js"));
 
-export {}
+export {};
 ```
 
 Alternatively, `@nullify/testing` comes with a tool to "collect" suites into a single run:
@@ -61,11 +61,18 @@ Alternatively, `@nullify/testing` comes with a tool to "collect" suites into a s
 ```typescript
 import { collect } from "@nullify/testing";
 
-// Run tests in series
+// Run suites in series
 collect(
   await import("./one.test.js"),
   await import("./two.test.js"),
   await import("./three.test.js")
+);
+
+// Run suites concurrently
+collect(
+  import("./one.test.js"),
+  import("./two.test.js"),
+  import("./three.test.js")
 );
 ```
 
@@ -77,9 +84,7 @@ Import and create a new test Suite. By default, a Suite will automatically run y
 import { Suite, assert } from "@nullify/testing";
 
 // Tests will auto-run when this module is imported/run
-const suite = new Suite("class");
-
-suite
+Suite.create("class")
   .beforeEach(() => {
     // Setup test here
   })
