@@ -30,9 +30,10 @@
     "build": "tsc",
     "lint": "eslint --fix --ext .js,.ts",
     "clean": "rimraf dist tsconfig.tsbuildinfo",
-    "verify": "npm run build && npm run test && npm run lint",
+    "verify": "npm run build && npm run coverage && npm run lint",
     "changeset": "changeset",
-    "release": "npm run verify && changeset publish",
+    "version": "changeset version",
+    "publish": "changeset publish",
     "docs": "typedoc --excludePrivate --excludeInternal src/mod.ts"
   },
   "devDependencies": {

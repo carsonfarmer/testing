@@ -33,4 +33,4 @@ jobs:
         run: npm install
 
       - name: Test 🚀
-        run: npm run test
+        run: npm run verify
