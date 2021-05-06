@@ -173,7 +173,7 @@
 				<p><strong>Browser support</strong></p>
 				<p>Runs in any modern browser with ES module support. Simply import it and define your tests; no bundlers required!</p>
 				<pre><code class="language-html"><span style="color: #800000">&lt;script</span><span style="color: #000000FF"> </span><span style="color: #FF0000">type</span><span style="color: #000000FF">=</span><span style="color: #0000FF">&quot;module&quot;</span><span style="color: #800000">&gt;</span>
-<span style="color: #000000FF">  </span><span style="color: #AF00DB">import</span><span style="color: #000000FF"> { </span><span style="color: #001080">Suite</span><span style="color: #000000FF">, </span><span style="color: #001080">assert</span><span style="color: #000000FF"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000FF"> </span><span style="color: #A31515">&quot;https://unpkg.com/@nullify/testing?module&quot;</span><span style="color: #000000FF">;</span>
+<span style="color: #000000FF">  </span><span style="color: #AF00DB">import</span><span style="color: #000000FF"> { </span><span style="color: #001080">Suite</span><span style="color: #000000FF">, </span><span style="color: #001080">assert</span><span style="color: #000000FF"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000FF"> </span><span style="color: #A31515">&quot;https://unpkg.com/@nullify/testing&quot;</span><span style="color: #000000FF">;</span>
 
 <span style="color: #000000FF">  </span><span style="color: #0000FF">const</span><span style="color: #000000FF"> </span><span style="color: #0070C1">suite</span><span style="color: #000000FF"> </span><span style="color: #000000">=</span><span style="color: #000000FF"> </span><span style="color: #0000FF">new</span><span style="color: #000000FF"> </span><span style="color: #795E26">Suite</span><span style="color: #000000FF">(</span><span style="color: #A31515">&quot;example&quot;</span><span style="color: #000000FF">);</span>
 <span style="color: #000000FF">  </span><span style="color: #001080">suite</span><span style="color: #000000FF">.</span><span style="color: #795E26">test</span><span style="color: #000000FF">(</span><span style="color: #A31515">&quot;one&quot;</span><span style="color: #000000FF">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000FF"> {</span>
@@ -199,7 +199,7 @@
 <span style="color: #000000">});</span>
 </code></pre>
 				<script type="module" unsafe-inline>
-  import { Suite, assert } from "https://unpkg.com/@nullify/testing";
+  import { Suite, assert } from "https://unpkg.com/@nullify/testing/dist/mod.js";
 
   const suite = new Suite("example");
   suite.test("one", () => {
