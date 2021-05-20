@@ -1,6 +1,6 @@
 {
   "name": "@nullify/testing",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A tiny testing library designed for modern Javascript",
   "main": "./dist/mod.js",
   "types": "./dist/mod.d.ts",
