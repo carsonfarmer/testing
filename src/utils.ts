@@ -51,10 +51,11 @@ export class TimeoutError extends Error {}
 
 export const timeout = <T = unknown>(
   promise: Promise<T> | T,
-  timeout = Infinity
+  timeout?: number
 ): Promise<T> => {
   let clear: ReturnType<typeof setTimeout>;
   const t = new Promise<T>((_, reject) => {
+    if (timeout == null) return;
     clear = setTimeout(
       () => reject(new TimeoutError(`timeout after ${timeout}ms`)),
       timeout

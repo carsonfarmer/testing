@@ -1,8 +1,30 @@
-# `@nullify/testing`
+# testing
 
-## Why?
+[![GitHub license](https://img.shields.io/github/license/carsonfarmer/testing.svg)](./LICENSE)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/carsonfarmer/testing.svg)](./package.json)
+[![npm (scoped)](https://img.shields.io/npm/v/@nullify/testing.svg)](https://www.npmjs.com/package/@nullify/testing)
+[![Release](https://img.shields.io/github/release/carsonfarmer/testing.svg)](https://github.com/carsonfarmer/testing/releases/latest)
+[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg)](https://github.com/RichardLitt/standard-readme)
 
-Because writing tests should be just like writing any other code. When writing tests with `@nullify/testing`, test modules are simple standalone scripts. They can be run in NodeJS, browsers, on mobile devices, etc. There are no external test runners or special global variables to require. Simply import `@nullify/testing`, define your tests using APIs that are similar to other testing frameworks, and run the script "as is".
+![Tests](https://github.com/carsonfarmer/testing/workflows/Test/badge.svg)
+[![Docs](https://github.com/carsonfarmer/testing/workflows/Docs/badge.svg)](https://carsonfarmer.github.io/testing)
+
+> A tiny testing library designed for modern Javascript
+
+# Table of Contents
+
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [API](#api)
+- [Details/Thanks](#detailsthanks)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
+
+# Background
+
+Writing tests should be just like writing any other code. When writing tests with `@nullify/testing`, test modules are simple standalone scripts. They can be run in NodeJS, browsers, on mobile devices, etc. There are no external test runners or special global variables to require. Simply import `@nullify/testing`, define your tests using APIs that are similar to other testing frameworks, and run the script "as is".
 
 It will automatically run as a test suite!
 
@@ -18,13 +40,19 @@ It will automatically run as a test suite!
 - Built with Typescript, and supports Typescript tests
 - Coverage reporting tools "just work"
 
-## Usage
+# Install
+
+```bash
+npm i @nullify/testing
+```
+
+# Usage
 
 There are multiple alternative APIs to make using `@nullify/testing` as easy as possible. Each test "suite" is a self-contained test suite, with its own runner and "stack" of hooks. Hooks are scoped to a given suite, and possibly to a given group within a suite. Ideally, each suite is its own module, and can be auto-run on import. For more complex testing scenarios, it is possible to include multiple suites in a single module, or to use an "index" test script to import multiple test suites.
 
 Tests _within_ a suite are run serially. But, individual suites can be run concurrently. Concurrency is simply a function of how the test suite is run. If you export a "promised" suite from a module and await it before running the next, you have serial tests, otherwise, you'll have concurrent tests!
 
-### Examples
+# API
 
 **Suite as object**
 
@@ -186,8 +214,23 @@ describe("the main test", () => {
   });
 </script>
 
-## Details/Thanks
+# Details/Thanks
 
 The `@nullify/testing` library borrows heavily from the Deno standard library [`testing` module](https://github.com/denoland/deno_std/tree/main/testing), the builtin [`Deno.test`](https://doc.deno.land/builtin/stable#Deno.test) tooling, as well as [`node-test`](https://github.com/ben-page/node-test), and [`hooked`](https://github.com/luvies/deno_hooked). It is kept simple by only supporting ES modules, promises and async/await patterns, and a very limited and opinionated API. What this leads to is simpler tests that "just work".
 
 Hooks are implemented using a last-in first-out (LIFO) stack (thanks `hooked`), and the built-in test runner is a simple ordered test registry that can be iterated over as an async iterable (thanks Deno). The built-in assertion library is borrowed directly from Deno with minimal changes (thanks again Deno). The main difference is in how objects are formatted for comparison. This library uses vanilla `JSON.stringify` behavior to keep things simple and compatible, but at the expense of twice as many calls to `JSON.stringify` (thanks Stackoverflow).
+
+# Maintainers
+
+[@carsonfarmer](https://github.com/carsonfarmer)
+
+# Contributing
+
+PRs accepted.
+
+Small note: If editing the README, please conform to the
+[standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+
+# License
+
+MIT © 2021 Carson Farmer
