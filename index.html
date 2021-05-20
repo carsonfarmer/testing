@@ -58,13 +58,36 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#nullifytesting" id="nullifytesting" style="color: inherit; text-decoration: none;">
-					<h1><code>@nullify/testing</code></h1>
+				<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
+					<h1>testing</h1>
 				</a>
-				<a href="#why" id="why" style="color: inherit; text-decoration: none;">
-					<h2>Why?</h2>
+				<p><a href="./LICENSE"><img src="https://img.shields.io/github/license/carsonfarmer/testing.svg" alt="GitHub license"></a>
+					<a href="./package.json"><img src="https://img.shields.io/github/package-json/v/carsonfarmer/testing.svg" alt="GitHub package.json version"></a>
+					<a href="https://www.npmjs.com/package/@nullify/testing"><img src="https://img.shields.io/npm/v/@nullify/testing.svg" alt="npm (scoped)"></a>
+					<a href="https://github.com/carsonfarmer/testing/releases/latest"><img src="https://img.shields.io/github/release/carsonfarmer/testing.svg" alt="Release"></a>
+				<a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg" alt="standard-readme compliant"></a></p>
+				<p><img src="https://github.com/carsonfarmer/testing/workflows/Test/badge.svg" alt="Tests">
+				<a href="https://carsonfarmer.github.io/testing"><img src="https://github.com/carsonfarmer/testing/workflows/Docs/badge.svg" alt="Docs"></a></p>
+				<blockquote>
+					<p>A tiny testing library designed for modern Javascript</p>
+				</blockquote>
+				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
+					<h1>Table of Contents</h1>
 				</a>
-				<p>Because writing tests should be just like writing any other code. When writing tests with <code>@nullify/testing</code>, test modules are simple standalone scripts. They can be run in NodeJS, browsers, on mobile devices, etc. There are no external test runners or special global variables to require. Simply import <code>@nullify/testing</code>, define your tests using APIs that are similar to other testing frameworks, and run the script &quot;as is&quot;.</p>
+				<ul>
+					<li><a href="#background">Background</a></li>
+					<li><a href="#install">Install</a></li>
+					<li><a href="#usage">Usage</a></li>
+					<li><a href="#api">API</a></li>
+					<li><a href="#detailsthanks">Details/Thanks</a></li>
+					<li><a href="#maintainers">Maintainers</a></li>
+					<li><a href="#contributing">Contributing</a></li>
+					<li><a href="#license">License</a></li>
+				</ul>
+				<a href="#background" id="background" style="color: inherit; text-decoration: none;">
+					<h1>Background</h1>
+				</a>
+				<p>Writing tests should be just like writing any other code. When writing tests with <code>@nullify/testing</code>, test modules are simple standalone scripts. They can be run in NodeJS, browsers, on mobile devices, etc. There are no external test runners or special global variables to require. Simply import <code>@nullify/testing</code>, define your tests using APIs that are similar to other testing frameworks, and run the script &quot;as is&quot;.</p>
 				<p>It will automatically run as a test suite!</p>
 				<a href="#features" id="features" style="color: inherit; text-decoration: none;">
 					<h2>Features</h2>
@@ -80,13 +103,18 @@
 					<li>Built with Typescript, and supports Typescript tests</li>
 					<li>Coverage reporting tools &quot;just work&quot;</li>
 				</ul>
+				<a href="#install" id="install" style="color: inherit; text-decoration: none;">
+					<h1>Install</h1>
+				</a>
+				<pre><code class="language-bash"><span style="color: #000000">npm i @nullify/testing</span>
+</code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
+					<h1>Usage</h1>
 				</a>
 				<p>There are multiple alternative APIs to make using <code>@nullify/testing</code> as easy as possible. Each test &quot;suite&quot; is a self-contained test suite, with its own runner and &quot;stack&quot; of hooks. Hooks are scoped to a given suite, and possibly to a given group within a suite. Ideally, each suite is its own module, and can be auto-run on import. For more complex testing scenarios, it is possible to include multiple suites in a single module, or to use an &quot;index&quot; test script to import multiple test suites.</p>
 				<p>Tests <em>within</em> a suite are run serially. But, individual suites can be run concurrently. Concurrency is simply a function of how the test suite is run. If you export a &quot;promised&quot; suite from a module and await it before running the next, you have serial tests, otherwise, you&#39;ll have concurrent tests!</p>
-				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
-					<h3>Examples</h3>
+				<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+					<h1>API</h1>
 				</a>
 				<p><strong>Suite as object</strong></p>
 				<p>Import and create a new suite object. Tests can be awaited to support running multiple suites in series (or concurrently). Specify optional settings to control suite behavior, such as disabling <code>console.log</code> output, or auto-running the whole suite.</p>
@@ -213,10 +241,24 @@
   });
 </script>
 				<a href="#detailsthanks" id="detailsthanks" style="color: inherit; text-decoration: none;">
-					<h2>Details/Thanks</h2>
+					<h1>Details/Thanks</h1>
 				</a>
 				<p>The <code>@nullify/testing</code> library borrows heavily from the Deno standard library <a href="https://github.com/denoland/deno_std/tree/main/testing"><code>testing</code> module</a>, the builtin <a href="https://doc.deno.land/builtin/stable#Deno.test"><code>Deno.test</code></a> tooling, as well as <a href="https://github.com/ben-page/node-test"><code>node-test</code></a>, and <a href="https://github.com/luvies/deno_hooked"><code>hooked</code></a>. It is kept simple by only supporting ES modules, promises and async/await patterns, and a very limited and opinionated API. What this leads to is simpler tests that &quot;just work&quot;.</p>
 				<p>Hooks are implemented using a last-in first-out (LIFO) stack (thanks <code>hooked</code>), and the built-in test runner is a simple ordered test registry that can be iterated over as an async iterable (thanks Deno). The built-in assertion library is borrowed directly from Deno with minimal changes (thanks again Deno). The main difference is in how objects are formatted for comparison. This library uses vanilla <code>JSON.stringify</code> behavior to keep things simple and compatible, but at the expense of twice as many calls to <code>JSON.stringify</code> (thanks Stackoverflow).</p>
+				<a href="#maintainers" id="maintainers" style="color: inherit; text-decoration: none;">
+					<h1>Maintainers</h1>
+				</a>
+				<p><a href="https://github.com/carsonfarmer">@carsonfarmer</a></p>
+				<a href="#contributing" id="contributing" style="color: inherit; text-decoration: none;">
+					<h1>Contributing</h1>
+				</a>
+				<p>PRs accepted.</p>
+				<p>Small note: If editing the README, please conform to the
+				<a href="https://github.com/RichardLitt/standard-readme">standard-readme</a> specification.</p>
+				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+					<h1>License</h1>
+				</a>
+				<p>MIT © 2021 Carson Farmer</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
