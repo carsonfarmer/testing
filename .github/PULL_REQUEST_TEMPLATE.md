@@ -1,6 +1,6 @@
 <!--------------------------------------------------------------------------
 👉 STEP 1: Welcome! Thanks for taking the time to submit a pull request!
-     Even if you're a seasoned developer, this PR etiquettegist is always a
+     Even if you're a seasoned developer, this PR etiquette gist is always a
      good read: https://gist.github.com/mikepea/863f63d6e37281e329f8
 --------------------------------------------------------------------------->
 
@@ -12,11 +12,10 @@
 
 <!--------------------------------------------------------------------------
 👉 STEP 3: Write a concise but specific PR title in the box above.
-     Prefix your PR with a relevant Rush Stack package name in brackets.
-     For example, if your PR fixes the "@rushstack/ts-command-line" project,
-     then your GitHub title might look like:
+     Prefix your PR with its type.
+     For example, if your PR fixes docs then your GitHub title might look like:
 
-     "[ts-command-line] Add support for numeric command line parameters"
+     "[docs] Add reference to cool new feature"
 --------------------------------------------------------------------------->
 
 ## Summary
@@ -49,19 +48,6 @@
 👉 STEP 6: What test cases did you use to validate your work?
      Given the complexities of how build tools interact with the OS, we only
      require unit tests for algorithmic code (e.g. parsing a string, sorting a list).
-     Manual testing is fine; you might write something like:
-
-     "Invoked 'rush install' with useWorkspaces=true and useWorkspaces=false
-     and confirmed that peer dependencies were handled correctly."
-
-     NOTE: Manual testing should be performed on the *final* commit.
-     Pushing additional commits with "small" fixes often invalidates testing.
---------------------------------------------------------------------------->
-
-<!--------------------------------------------------------------------------
-👉 STEP 7: Don't forget to run "rush change":
-
-     https://rushjs.io/pages/best_practices/change_logs/
 --------------------------------------------------------------------------->
 
 <!--------------------------------------------------------------------------
@@ -78,4 +64,3 @@
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes
 - [ ] Any dependent changes have been merged and published in downstream modules
-- [ ] I have run "rush change" to generate a nice changelog
